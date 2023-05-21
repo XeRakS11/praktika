@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, QStackedLayout, QVBoxLayout, QWidget, QRadioButton
 from PyQt6 import QtCore
-
+# from sf import *
 
 class TestWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, n):
         super().__init__()
-        self.setFixedSize(800,450)
+        self.setFixedSize(500,450)
         lbl1 = QLabel("1.Когда необходимо составлять блок-схему программы?")
         self.rb1 = QRadioButton(text="До начала составления самой программы")
         rb2 = QRadioButton(text="В процессе составления программы")
@@ -76,8 +76,21 @@ class TestWindow(QMainWindow):
         widget6.setLayout(vbox6)
         vbox6.addWidget(lbl6)
         vbox6.addWidget(rb3_5)
+        lbl6 = QLabel("Готов увидеть что натыкал?")
+        lbl6.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         
-        lbl7 = QLabel("Результаты теста:")
+        
+        rb3_5 = QPushButton("Да")
+        rb3_5.clicked.connect(self.activate_tab_v)
+        rb3_5.clicked.connect(self.result)
+        vbox6 = QVBoxLayout()
+        widget6 = QWidget()
+        widget6.setLayout(vbox6)
+        vbox6.addWidget(lbl6)
+        vbox6.addWidget(rb3_5)
+        lbl7 = QLabel("Результаты теста:" + n)
+        
+        
         self.v6 = QLabel()
         self.v2 = QLabel()
         self.v3 = QLabel()
@@ -95,8 +108,6 @@ class TestWindow(QMainWindow):
         vbox7.addWidget(self.v5)
         vbox7.addWidget(self.res)
         
-        
-
         pagelayout = QVBoxLayout()
         self.button_layout = QHBoxLayout()
         self.stacklayout = QStackedLayout()
@@ -109,40 +120,37 @@ class TestWindow(QMainWindow):
         
         self.btnb.clicked.connect(self.activate_tab_b)
         self.btn.clicked.connect(self.activate_tab_v)
+        
         self.stacklayout.addWidget(widget)
+        
         self.button_layout.addWidget(self.btnb)
+        
         self.button_layout.addWidget(self.btn)
         
-
         self.stacklayout.addWidget(widget2)
-
+        
         self.stacklayout.addWidget(widget3)
-
+        
         self.stacklayout.addWidget(widget4)
-
+        
         self.stacklayout.addWidget(widget5)
-
+        
         self.stacklayout.addWidget(widget6)
         
         self.stacklayout.addWidget(widget7)
-
-
         widget = QWidget()
         widget.setLayout(pagelayout)
-        self.setCentralWidget(widget)
-        
+        self.setCentralWidget(widget)     
         with open("styles.css", "r") as css:
             widget.setStyleSheet(css.read())
 
     def activate_tab_v(self):
         self.stacklayout.setCurrentIndex(self.stacklayout.currentIndex()+1)
             
-    
-
     def activate_tab_b(self):
         self.stacklayout.setCurrentIndex(self.stacklayout.currentIndex()-1)
         
-    def result(self):
+    def result(self,name):
         if self.rb1.isChecked():
             self.v6.setText("1.Верно")
             a = 1
@@ -173,16 +181,10 @@ class TestWindow(QMainWindow):
         else:
             self.v5.setText("5.Не верно")
             e = d
+        
+    
             
-        self.setFixedSize(400, 200)
+        self.setFixedSize(400, 300)
         self.res.setText(f"Ваш результат:{e}")
-        #with open ('results.txt', "w", encoding="utf-8")as f:
-         #   f.write(e)
-        
-            
-        
-
-        
-
-        
-
+        with open ('results.txt', "w", encoding="utf-8")as f:
+            f.write(str( + e + name))
